@@ -4,14 +4,17 @@ import { useBoardStore } from '../store/useBoardStore';
 import { Logo } from './Logo';
 
 const KANBAN_PUNS = [
-    "Yes We Kan!",
-    "That's a Kan-do attitude.",
-    "Kan you handle this?",
-    "Kan-tastic work ahead.",
-    "Stop saying Kan't.",
-    "Opening a can of productivity.",
-    "Kan you believe it?",
-    "Catch me if you Kan.",
+    "Pop the top on productivity.",
+    "Fresh focus inside.",
+    "Contents: 100% Organic Focus.",
+    "No preservatives. Just tasks.",
+    "Best if used by: EOD.",
+    "100% Condensed Focus.",
+    "Packed with potential.",
+    "No artificial fillers. Just tasks.",
+    "Contents settled during shipping.",
+    "High in fiber. Low in distractions.",
+    "Store in a cool, dry place (like this tab).",
 ];
 
 export const Curtain: React.FC = () => {

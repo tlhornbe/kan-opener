@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+# Kan-Opener 🥫
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Fresh Focus. No Preservatives.**
 
-Currently, two official plugins are available:
+Kan-Opener is a privacy-first Kanban board that lives in your New Tab page. It helps you organize your tasks with zero friction and zero data tracking.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features ✨
 
-## React Compiler
+-   **Privacy Curtain**: Keeps your tasks hidden from prying eyes until you're ready to work.
+-   **Frictionless Entry**: Add tasks and columns inline. No modals, no waiting.
+-   **Drag & Drop**: Smooth, glitch-free sorting for tasks and columns.
+-   **Satisfying Shredder**: Drag tasks to "Done" and watch them explode into confetti.
+-   **Persistent Theme**: Remembers your Dark/Light mode preference automatically.
+-   **Offline First**: Your data stays in your browser (Chrome Sync), never on our servers.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Installation 🛠️
 
-## Expanding the ESLint configuration
+### From Source (Developer Mode)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1.  Clone this repository.
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Build the extension:
+    ```bash
+    npm run build
+    ```
+4.  Open Chrome and go to `chrome://extensions`.
+5.  Enable **Developer mode** (top right).
+6.  Click **Load unpacked**.
+7.  Select the `dist` folder from this project.
+8.  Open a new tab and enjoy!
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Development 💻
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+To run the web version for quick UI testing:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Tech Stack 🏗️
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+-   **Vite**: Fast tooling.
+-   **React**: UI library.
+-   **TypeScript**: Type safety.
+-   **Tailwind CSS**: Styling.
+-   **Framer Motion**: Animations.
+-   **Zustand**: State management.
+-   **Hello Pangea DND**: Drag and drop.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+*Store in a cool, dry place (like this tab).*

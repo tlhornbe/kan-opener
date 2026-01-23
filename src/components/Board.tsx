@@ -130,47 +130,49 @@ export const Board: React.FC = () => {
                             })}
                             {provided.placeholder}
 
-                            {/* Add Column Section */}
-                            <div className="w-full md:w-80 shrink-0">
-                                {!isAddingColumn ? (
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAddingColumn(true)}
-                                        className="w-full h-[150px] border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex flex-col items-center justify-center text-slate-400 hover:border-blue-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-slate-800 transition-all cursor-pointer gap-2"
-                                    >
-                                        <Plus size={32} />
-                                        <span className="font-semibold">Add Column</span>
-                                    </button>
-                                ) : (
-                                    <div className="w-full h-[150px] p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg border-2 border-blue-400 dark:border-blue-500 flex flex-col justify-center gap-3">
-                                        <input
-                                            autoFocus
-                                            placeholder="Column Title..."
-                                            className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-700 rounded-md outline-none text-slate-800 dark:text-slate-100 placeholder:text-slate-400 border border-slate-200 dark:border-slate-600 focus:border-blue-500"
-                                            value={newColumnTitle}
-                                            onChange={(e) => setNewColumnTitle(e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter') handleAddColumnSubmit();
-                                                if (e.key === 'Escape') setIsAddingColumn(false);
-                                            }}
-                                        />
-                                        <div className="flex justify-end gap-2">
-                                            <button
-                                                onClick={() => setIsAddingColumn(false)}
-                                                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-400"
-                                            >
-                                                <X size={20} />
-                                            </button>
-                                            <button
-                                                onClick={handleAddColumnSubmit}
-                                                className="px-4 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition"
-                                            >
-                                                Add
-                                            </button>
+                            {/* Add Column Section - Capped at 4 */}
+                            {columnOrder.length < 4 && (
+                                <div className="w-full md:w-80 shrink-0">
+                                    {!isAddingColumn ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsAddingColumn(true)}
+                                            className="w-full h-[150px] border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex flex-col items-center justify-center text-slate-400 hover:border-blue-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-slate-800 transition-all cursor-pointer gap-2"
+                                        >
+                                            <Plus size={32} />
+                                            <span className="font-semibold">Add Column</span>
+                                        </button>
+                                    ) : (
+                                        <div className="w-full h-[150px] p-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg border-2 border-blue-400 dark:border-blue-500 flex flex-col justify-center gap-3">
+                                            <input
+                                                autoFocus
+                                                placeholder="Column Title..."
+                                                className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-700 rounded-md outline-none text-slate-800 dark:text-slate-100 placeholder:text-slate-400 border border-slate-200 dark:border-slate-600 focus:border-blue-500"
+                                                value={newColumnTitle}
+                                                onChange={(e) => setNewColumnTitle(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') handleAddColumnSubmit();
+                                                    if (e.key === 'Escape') setIsAddingColumn(false);
+                                                }}
+                                            />
+                                            <div className="flex justify-end gap-2">
+                                                <button
+                                                    onClick={() => setIsAddingColumn(false)}
+                                                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-400"
+                                                >
+                                                    <X size={20} />
+                                                </button>
+                                                <button
+                                                    onClick={handleAddColumnSubmit}
+                                                    className="px-4 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 transition"
+                                                >
+                                                    Add
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     )}
                 </Droppable>

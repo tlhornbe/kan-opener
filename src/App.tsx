@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { useBoardStore } from './store/useBoardStore';
 import { Curtain } from './components/Curtain';
 import { Board } from './components/Board';
-import { EyeOff, KanbanSquare, Moon, Sun } from 'lucide-react';
+import { EyeOff, Moon, Sun } from 'lucide-react';
+import { Logo } from './components/Logo';
 
 function App() {
   const isRevealed = useBoardStore((state) => state.isRevealed);
@@ -28,7 +29,9 @@ function App() {
       {/* Header */}
       <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md flex items-center justify-between px-6 z-10 shrink-0">
         <div className="flex items-center space-x-3 text-blue-600 dark:text-blue-400">
-          <KanbanSquare size={28} strokeWidth={2.5} />
+          <div className="w-8 h-8">
+            <Logo className="w-full h-full" />
+          </div>
           <h1 className="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Kan-Opener</h1>
         </div>
 

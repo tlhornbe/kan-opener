@@ -53,7 +53,7 @@ export const Logo: React.FC<{ className?: string }> = ({ className }) => {
                         open: { opacity: 1, y: -10, scale: 1, transition: { delay: 0.1 } }
                     }}
                 >
-                    {/* Confetti / Kanban Cards internal representation */}
+                    {/* Kanban Cards */}
                     <rect x="35" y="50" width="20" height="30" rx="2" fill="#FFFFFF" fillOpacity="0.9" />
                     <rect x="65" y="45" width="20" height="30" rx="2" fill="#93C5FD" fillOpacity="0.9" />
                 </motion.g>

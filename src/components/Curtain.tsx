@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBoardStore } from '../store/useBoardStore';
 import { Logo } from './Logo';
 
+const KANBAN_PUNS = [
+    "Yes We Kan!",
+    "That's a Kan-do attitude.",
+    "Kan you handle this?",
+    "Kan-tastic work ahead.",
+    "Stop saying Kan't.",
+    "Opening a can of productivity.",
+    "Kan you believe it?",
+    "Catch me if you Kan.",
+];
 
 export const Curtain: React.FC = () => {
     const isRevealed = useBoardStore((state) => state.isRevealed);
     const setRevealed = useBoardStore((state) => state.setRevealed);
+    const [pun, setPun] = useState("");
 
+    useEffect(() => {
+        setPun(KANBAN_PUNS[Math.floor(Math.random() * KANBAN_PUNS.length)]);
+    }, [isRevealed]);
 
     return (
         <AnimatePresence>
@@ -42,6 +56,14 @@ export const Curtain: React.FC = () => {
                             Kan-Opener
                         </motion.h1>
 
+                        <motion.p
+                            className="text-slate-200 mb-10 text-lg font-medium max-w-md h-8 drop-shadow-sm italic"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.6 }}
+                        >
+                            "{pun}"
+                        </motion.p>
 
                         <motion.button
                             onClick={() => setRevealed(true)}
@@ -54,7 +76,6 @@ export const Curtain: React.FC = () => {
                             </span>
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </motion.button>
-
                     </motion.div>
                 </motion.div>
             )}

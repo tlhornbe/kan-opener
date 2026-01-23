@@ -228,7 +228,8 @@ export const useBoardStore = create<BoardState>()(
             partialize: (state) => ({
                 tasks: state.tasks,
                 columns: state.columns,
-                columnOrder: state.columnOrder
+                columnOrder: state.columnOrder,
+                theme: state.theme
             }),
         }
     )

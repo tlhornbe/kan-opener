@@ -1,25 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBoardStore } from '../store/useBoardStore';
 import { Logo } from './Logo';
 
-const SAFE_MESSAGES = [
-    "Privacy Shields Active.",
-    "Kanban mode engaged.",
-    "Focus mode: Ready.",
-    "Your board is waiting.",
-    "Productivity implies motion.",
-    "Opening the can...",
-];
 
 export const Curtain: React.FC = () => {
     const isRevealed = useBoardStore((state) => state.isRevealed);
     const setRevealed = useBoardStore((state) => state.setRevealed);
-    const [message, setMessage] = useState("");
 
-    useEffect(() => {
-        setMessage(SAFE_MESSAGES[Math.floor(Math.random() * SAFE_MESSAGES.length)]);
-    }, [isRevealed]);
 
     return (
         <AnimatePresence>
@@ -54,14 +42,6 @@ export const Curtain: React.FC = () => {
                             Kan-Opener
                         </motion.h1>
 
-                        <motion.p
-                            className="text-slate-200 mb-10 text-lg font-medium max-w-md h-8 drop-shadow-sm"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.6 }}
-                        >
-                            {message}
-                        </motion.p>
 
                         <motion.button
                             onClick={() => setRevealed(true)}

@@ -28,6 +28,9 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingTaskId, setEditingTaskId] = useState<string | undefined>(undefined);
 
+    // Delete Confirmation State
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+
     const handleTitleSubmit = () => {
         if (titleInput.trim()) {
             updateColumnTitle(column.id, titleInput);
@@ -41,10 +44,6 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
         if (newTaskTitle.trim()) {
             addTask(column.id, newTaskTitle.trim());
             setNewTaskTitle("");
-            // Keep adding mode open for frictionless mass-entry? 
-            // User request: "frictionless". 
-            // Let's keep it open so they can type, Enter, type, Enter.
-            // To close, they can hit Esc or click Cancel.
         }
     };
 
@@ -59,19 +58,18 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
     };
 
     const handleDeleteColumn = () => {
-        if (confirm(`Are you sure you want to delete "${column.title}" and all its tasks?`)) {
-            deleteColumn(column.id);
-        }
+        deleteColumn(column.id);
+        setIsConfirmingDelete(false);
     };
 
     return (
         <>
             <div className="flex flex-col w-full md:w-80 shrink-0 group/column bg-slate-50/50 dark:bg-slate-800/10 rounded-xl">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-2 px-1 py-1">
+                <div className="flex items-center justify-between mb-2 px-1 py-1 min-h-[32px]">
                     <div className="flex items-center gap-2 flex-1 relative">
                         {/* Drag Handle */}
-                        {column.id !== 'done' && (
+                        {column.id !== 'done' && !isConfirmingDelete && (
                             <div
                                 {...dragHandleProps}
                                 className="p-1 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500 transition-colors"
@@ -80,7 +78,7 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
                             </div>
                         )}
 
-                        {isEditingTitle ? (
+                        {isEditingTitle && !isConfirmingDelete ? (
                             <input
                                 autoFocus
                                 className="w-full px-2 py-1 text-sm font-semibold rounded bg-white dark:bg-slate-700 border border-blue-400 outline-none"
@@ -89,15 +87,18 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
                                 onBlur={handleTitleSubmit}
                                 onKeyDown={(e) => e.key === 'Enter' && handleTitleSubmit()}
                             />
-                        ) : (
+                        ) : !isConfirmingDelete ? (
                             <h3
                                 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
                                 onClick={() => setIsEditingTitle(true)}
                             >
                                 {column.title}
                             </h3>
+                        ) : (
+                            <span className="text-sm font-bold text-red-500 animate-pulse">Delete this column?</span>
                         )}
-                        {column.id !== 'done' && (
+
+                        {column.id !== 'done' && !isConfirmingDelete && (
                             <span className="text-xs font-medium text-slate-400 bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full">
                                 {tasks.length}
                             </span>
@@ -106,13 +107,32 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
 
                     {/* Column Actions */}
                     {column.id !== 'done' && (
-                        <button
-                            onClick={handleDeleteColumn}
-                            className="p-1 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded opacity-0 group-hover/column:opacity-100 transition-all"
-                            title="Delete Column"
-                        >
-                            <Trash2 size={14} />
-                        </button>
+                        !isConfirmingDelete ? (
+                            <button
+                                onClick={() => setIsConfirmingDelete(true)}
+                                className="p-1 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded opacity-0 group-hover/column:opacity-100 transition-all"
+                                title="Delete Column"
+                            >
+                                <Trash2 size={14} />
+                            </button>
+                        ) : (
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => setIsConfirmingDelete(false)}
+                                    className="p-1 text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 rounded"
+                                    title="Cancel"
+                                >
+                                    <X size={14} />
+                                </button>
+                                <button
+                                    onClick={handleDeleteColumn}
+                                    className="p-1 text-white bg-red-500 hover:bg-red-600 rounded shadow-sm"
+                                    title="Confirm Delete"
+                                >
+                                    <Trash2 size={14} />
+                                </button>
+                            </div>
+                        )
                     )}
                 </div>
 

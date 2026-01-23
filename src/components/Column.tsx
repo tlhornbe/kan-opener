@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Droppable, type DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 import { type Column as ColumnType, type Task as TaskType, useBoardStore } from '../store/useBoardStore';
 import { Task } from './Task';
-import { Plus, Trash2, GripVertical } from 'lucide-react';
+import { Plus, Trash2, GripVertical, Check, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { AnimatePresence } from 'framer-motion';
 import { TaskModal } from './TaskModal';
@@ -16,9 +16,14 @@ interface ColumnProps {
 export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }) => {
     const updateColumnTitle = useBoardStore((state) => state.updateColumnTitle);
     const deleteColumn = useBoardStore((state) => state.deleteColumn);
+    const addTask = useBoardStore((state) => state.addTask);
 
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [titleInput, setTitleInput] = useState(column.title);
+
+    // Task Creation State
+    const [isAddingTask, setIsAddingTask] = useState(false);
+    const [newTaskTitle, setNewTaskTitle] = useState("");
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingTaskId, setEditingTaskId] = useState<string | undefined>(undefined);
@@ -32,9 +37,20 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
         setIsEditingTitle(false);
     };
 
-    const openAddTask = () => {
-        setEditingTaskId(undefined);
-        setIsModalOpen(true);
+    const handleAddTaskSubmit = () => {
+        if (newTaskTitle.trim()) {
+            addTask(column.id, newTaskTitle.trim());
+            setNewTaskTitle("");
+            // Keep adding mode open for frictionless mass-entry? 
+            // User request: "frictionless". 
+            // Let's keep it open so they can type, Enter, type, Enter.
+            // To close, they can hit Esc or click Cancel.
+        }
+    };
+
+    const cancelAddTask = () => {
+        setIsAddingTask(false);
+        setNewTaskTitle("");
     };
 
     const openEditTask = (taskId: string) => {
@@ -125,10 +141,31 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
                             </AnimatePresence>
                             {provided.placeholder}
 
+                            {/* Inline Add Task Input */}
+                            {column.id !== 'done' && isAddingTask && (
+                                <div className="mb-2 p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm border-2 border-blue-400 dark:border-blue-500">
+                                    <input
+                                        autoFocus
+                                        placeholder="What needs doing?"
+                                        className="w-full text-sm bg-transparent outline-none text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
+                                        value={newTaskTitle}
+                                        onChange={(e) => setNewTaskTitle(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') handleAddTaskSubmit();
+                                            if (e.key === 'Escape') cancelAddTask();
+                                        }}
+                                    />
+                                    <div className="flex justify-end gap-2 mt-2">
+                                        <button onClick={cancelAddTask} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-600 rounded text-slate-400"><X size={14} /></button>
+                                        <button onClick={handleAddTaskSubmit} className="p-1 bg-blue-500 hover:bg-blue-600 rounded text-white"><Check size={14} /></button>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Add Task Button */}
-                            {column.id !== 'done' && (
+                            {column.id !== 'done' && !isAddingTask && (
                                 <button
-                                    onClick={openAddTask}
+                                    onClick={() => setIsAddingTask(true)}
                                     className="w-full mt-2 py-2 flex items-center justify-center text-sm font-medium text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all border border-transparent hover:border-blue-200 dark:hover:border-blue-800 border-dashed"
                                 >
                                     <Plus size={16} className="mr-1" /> Add Task

@@ -126,7 +126,12 @@ export const Board: React.FC = () => {
                             {/* Add Column Button */}
                             <div className="w-full md:w-80 shrink-0">
                                 <button
-                                    onClick={handleAddColumn}
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleAddColumn();
+                                    }}
                                     className="w-full h-[150px] border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex flex-col items-center justify-center text-slate-400 hover:border-blue-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-slate-800 transition-all cursor-pointer gap-2"
                                 >
                                     <Plus size={32} />

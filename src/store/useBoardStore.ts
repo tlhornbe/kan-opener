@@ -223,7 +223,7 @@ export const useBoardStore = create<BoardState>()(
         }),
         {
             name: 'kan-opener-storage',
-            version: 2, // Increment version for potential migration handling (though zustand persist simple doesn't auto-migrate strongly)
+            version: 2,
             storage: createJSONStorage(() => customStorage),
             partialize: (state) => ({
                 tasks: state.tasks,
@@ -231,6 +231,7 @@ export const useBoardStore = create<BoardState>()(
                 columnOrder: state.columnOrder,
                 theme: state.theme
             }),
+
         }
     )
 );

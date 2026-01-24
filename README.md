@@ -50,5 +50,11 @@ npm run dev
 -   **Zustand**: State management.
 -   **Hello Pangea DND**: Drag and drop.
 
+## About the Author 👨‍💻
+
+**Taylor Hornberger** - Product Manager & Builder
+
+Connect with me on [LinkedIn](https://www.linkedin.com/in/taylorhornberger/) to see more of my work in product and development.
+
 ---
 *Store in a cool, dry place (like this tab).*

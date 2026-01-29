@@ -15,12 +15,19 @@ export interface Column {
     taskIds: string[];
 }
 
+export interface Bookmark {
+    id: string;
+    title: string;
+    url: string;
+}
+
 interface BoardState {
     tasks: Record<string, Task>;
     columns: Record<string, Column>;
     columnOrder: string[];
     isRevealed: boolean;
     theme: 'dark' | 'light';
+    bookmarks: Bookmark[];
 
     // Actions
     setRevealed: (revealed: boolean) => void;
@@ -43,6 +50,10 @@ interface BoardState {
     updateColumnTitle: (columnId: string, title: string) => void;
     deleteColumn: (columnId: string) => void;
     moveColumn: (sourceIndex: number, destIndex: number) => void;
+
+    // Bookmark Actions
+    addBookmark: (title: string, url: string) => void;
+    removeBookmark: (id: string) => void;
 }
 
 const customStorage = {
@@ -70,6 +81,11 @@ export const useBoardStore = create<BoardState>()(
             columnOrder: ['todo', 'in-progress', 'done'],
             isRevealed: false,
             theme: 'dark', // Default to dark as requested
+            bookmarks: [
+                { id: 'b1', title: 'Google', url: 'https://google.com' },
+                { id: 'b2', title: 'YouTube', url: 'https://youtube.com' },
+                { id: 'b3', title: 'Reddit', url: 'https://reddit.com' }
+            ], // Default bookmarks
 
             setRevealed: (revealed) => set({ isRevealed: revealed }),
             toggleTheme: () => set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
@@ -220,16 +236,23 @@ export const useBoardStore = create<BoardState>()(
 
                 return { columnOrder: newColumnOrder };
             }),
+
+            addBookmark: (title, url) => set((state) => ({
+                bookmarks: [...state.bookmarks, { id: `bm-${Date.now()}`, title, url }]
+            })),
+
+            removeBookmark: (id) => set((state) => ({
+                bookmarks: state.bookmarks.filter(b => b.id !== id)
+            })),
         }),
         {
             name: 'kan-opener-storage',
             version: 2,
             storage: createJSONStorage(() => customStorage),
             partialize: (state) => ({
-                tasks: state.tasks,
-                columns: state.columns,
                 columnOrder: state.columnOrder,
-                theme: state.theme
+                theme: state.theme,
+                bookmarks: state.bookmarks
             }),
 
         }

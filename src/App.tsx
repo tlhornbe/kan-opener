@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useBoardStore } from './store/useBoardStore';
 import { Curtain } from './components/Curtain';
 import { Board } from './components/Board';
+import { QuickDock } from './components/QuickDock';
 import { EyeOff, Moon, Sun } from 'lucide-react';
 import { Logo } from './components/Logo';
 
@@ -27,12 +28,17 @@ function App() {
       <Curtain />
 
       {/* Header */}
-      <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md flex items-center justify-between px-6 z-10 shrink-0">
+      <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md flex items-center justify-between px-6 z-10 shrink-0 relative">
         <div className="flex items-center space-x-3 text-blue-600 dark:text-blue-400">
           <div className="w-8 h-8">
             <Logo className="w-full h-full" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Kan-Opener</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100 hidden md:block">Kan-Opener</h1>
+        </div>
+
+        {/* Quick Dock - Centered */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
+          <QuickDock readOnly={false} />
         </div>
 
         <div className="flex items-center space-x-4">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBoardStore } from '../store/useBoardStore';
 import { Logo } from './Logo';
+import { QuickDock } from './QuickDock';
 
 const KANBAN_PUNS = [
     "Pop the top on productivity.",
@@ -72,13 +73,15 @@ export const Curtain: React.FC = () => {
                             onClick={() => setRevealed(true)}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="group relative px-8 py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 overflow-hidden"
+                            className="group relative px-8 py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 overflow-hidden mb-12"
                         >
                             <span className="relative z-10 flex items-center">
                                 Open Kan
                             </span>
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </motion.button>
+
+                        <QuickDock readOnly={true} />
                     </motion.div>
                 </motion.div>
             )}

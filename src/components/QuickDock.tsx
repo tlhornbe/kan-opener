@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useBoardStore } from '../store/useBoardStore';
-import { GoogleSearch } from './GoogleSearch';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, Trash2 } from 'lucide-react';
 
@@ -46,12 +46,9 @@ export const QuickDock: React.FC<QuickDockProps> = ({ readOnly = false }) => {
         // If not removing, let the link work naturally (it's an anchor tag)
     };
 
+
     return (
         <div className="flex items-center space-x-4">
-            <GoogleSearch />
-
-            <div className="h-8 w-px bg-slate-300 dark:bg-slate-700 mx-2" />
-
             <div className="flex items-center space-x-2">
                 <AnimatePresence>
                     {bookmarks.map((bookmark) => (

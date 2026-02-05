@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 import { useBoardStore } from './store/useBoardStore';
 import { Curtain } from './components/Curtain';
 import { Board } from './components/Board';
-import { QuickDock } from './components/QuickDock';
 import { EyeOff, Moon, Sun } from 'lucide-react';
 import { Logo } from './components/Logo';
+import { SearchBar } from './components/SearchBar';
+import { QuickDock } from './components/QuickDock';
 
 function App() {
   const isRevealed = useBoardStore((state) => state.isRevealed);
@@ -36,8 +37,11 @@ function App() {
           <h1 className="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100 hidden md:block">Kan-Opener</h1>
         </div>
 
-        {/* Quick Dock - Centered */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
+        {/* Center Group: Search + QuickDock */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-6">
+          <div className="w-64">
+            <SearchBar />
+          </div>
           <QuickDock readOnly={false} />
         </div>
 

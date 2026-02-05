@@ -250,6 +250,8 @@ export const useBoardStore = create<BoardState>()(
             version: 2,
             storage: createJSONStorage(() => customStorage),
             partialize: (state) => ({
+                tasks: state.tasks,
+                columns: state.columns,
                 columnOrder: state.columnOrder,
                 theme: state.theme,
                 bookmarks: state.bookmarks

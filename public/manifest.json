@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Kan-Opener",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A privacy-focused Kanban board for the browser's new tab page.",
   "chrome_url_overrides": {
     "newtab": "index.html"

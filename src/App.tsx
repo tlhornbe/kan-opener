@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useBoardStore } from './store/useBoardStore';
 import { Curtain } from './components/Curtain';
 import { Board } from './components/Board';
-import { EyeOff, Moon, Sun } from 'lucide-react';
+import { EyeOff, Moon, Sun, Loader2 } from 'lucide-react';
 import { Logo } from './components/Logo';
 import { SearchBar } from './components/SearchBar';
 import { QuickDock } from './components/QuickDock';
@@ -12,6 +12,7 @@ function App() {
   const setRevealed = useBoardStore((state) => state.setRevealed);
   const theme = useBoardStore((state) => state.theme);
   const toggleTheme = useBoardStore((state) => state.toggleTheme);
+  const _hasHydrated = useBoardStore((state) => state._hasHydrated);
 
   // Apply dark mode class to html element
   useEffect(() => {
@@ -22,7 +23,22 @@ function App() {
     }
   }, [theme]);
 
-  // Set initial theme if not set (or rely on store default 'dark')
+  // Show loading screen while storage is hydrating
+  if (!_hasHydrated) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mb-4 flex justify-center">
+            <Logo className="w-24 h-24 drop-shadow-2xl" />
+          </div>
+          <div className="flex items-center justify-center gap-3 text-blue-400">
+            <Loader2 className="w-6 h-6 animate-spin" />
+            <span className="text-lg font-semibold">Loading Kan-Opener...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col font-sans">

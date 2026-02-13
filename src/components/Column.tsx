@@ -19,7 +19,10 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
     const addTask = useBoardStore((state) => state.addTask);
 
     const [isEditingTitle, setIsEditingTitle] = useState(false);
-    const [titleInput, setTitleInput] = useState(column.title);
+    const [titleInput, setTitleInput] = useState(column?.title || 'Untitled');
+
+    // Defensive check: Ensure tasks is an array
+    const safeTasks = Array.isArray(tasks) ? tasks : [];
 
     // Task Creation State
     const [isAddingTask, setIsAddingTask] = useState(false);
@@ -100,7 +103,7 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
 
                         {column.id !== 'done' && !isConfirmingDelete && (
                             <span className="text-xs font-medium text-slate-400 bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full">
-                                {tasks.length}
+                                {safeTasks.length}
                             </span>
                         )}
                     </div>
@@ -149,7 +152,7 @@ export const Column: React.FC<ColumnProps> = ({ column, tasks, dragHandleProps }
                             )}
                         >
                             <AnimatePresence initial={false}>
-                                {tasks.map((task, index) => (
+                                {safeTasks.map((task, index) => (
                                     <Task
                                         key={task.id}
                                         task={task}

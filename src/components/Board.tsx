@@ -17,6 +17,19 @@ export const Board: React.FC = () => {
         setIsClient(true);
     }, []);
 
+    // Defensive check: Ensure required data exists
+    if (!columns || !columnOrder || !tasks) {
+        console.error('[Board] Missing required store data', { columns, columnOrder, tasks });
+        return (
+            <div className="flex-1 flex items-center justify-center">
+                <div className="text-center text-slate-500 dark:text-slate-400">
+                    <p className="text-lg font-semibold mb-2">Unable to load board data</p>
+                    <p className="text-sm">Try refreshing the page</p>
+                </div>
+            </div>
+        );
+    }
+
     const onDragEnd = (result: DropResult) => {
         const { destination, source, draggableId, type } = result;
 
@@ -99,7 +112,14 @@ export const Board: React.FC = () => {
                         >
                             {columnOrder.map((columnId, index) => {
                                 const column = columns[columnId];
-                                const columnTasks = column.taskIds
+                                
+                                // Defensive check: Skip if column doesn't exist
+                                if (!column) {
+                                    console.warn(`[Board] Column ${columnId} not found in columns object`);
+                                    return null;
+                                }
+                                
+                                const columnTasks = (column.taskIds || [])
                                     .map((taskId) => tasks[taskId])
                                     .filter(Boolean);
 

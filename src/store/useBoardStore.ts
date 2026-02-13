@@ -28,10 +28,12 @@ interface BoardState {
     isRevealed: boolean;
     theme: 'dark' | 'light';
     bookmarks: Bookmark[];
+    _hasHydrated: boolean; // Transient flag, not persisted to storage
 
     // Actions
     setRevealed: (revealed: boolean) => void;
     toggleTheme: () => void;
+    setHasHydrated: (hydrated: boolean) => void;
 
     // Task Actions
     addTask: (columnId: string, title: string, description?: string) => void;
@@ -86,9 +88,11 @@ export const useBoardStore = create<BoardState>()(
                 { id: 'b2', title: 'YouTube', url: 'https://youtube.com' },
                 { id: 'b3', title: 'Reddit', url: 'https://reddit.com' }
             ], // Default bookmarks
+            _hasHydrated: false, // Start as false, set to true after storage loads
 
             setRevealed: (revealed) => set({ isRevealed: revealed }),
             toggleTheme: () => set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
+            setHasHydrated: (hydrated) => set({ _hasHydrated: hydrated }),
 
             addTask: (columnId, title, description) => set((state) => {
                 const newTaskId = `task-${Date.now()}`;
@@ -250,13 +254,60 @@ export const useBoardStore = create<BoardState>()(
             version: 2,
             storage: createJSONStorage(() => customStorage),
             partialize: (state) => ({
+                // Only persist these fields - _hasHydrated is transient
                 tasks: state.tasks,
                 columns: state.columns,
                 columnOrder: state.columnOrder,
                 theme: state.theme,
                 bookmarks: state.bookmarks
             }),
-
+            onRehydrateStorage: () => (state) => {
+                // Called after storage is loaded
+                if (state) {
+                    state.setHasHydrated(true);
+                    console.log('[Kan-Opener] Storage hydrated successfully');
+                } else {
+                    console.warn('[Kan-Opener] Storage hydration returned null state');
+                    // Even on failure, mark as hydrated so app can render with defaults
+                    useBoardStore.getState().setHasHydrated(true);
+                }
+            },
+            migrate: (persistedState: unknown, version: number) => {
+                // Migration logic for version upgrades
+                console.log(`[Kan-Opener] Migrating from version ${version} to 2`);
+                
+                // Type guard for persisted state
+                const state = persistedState as Partial<{
+                    tasks: Record<string, Task>;
+                    columns: Record<string, Column>;
+                    columnOrder: string[];
+                    theme: 'dark' | 'light';
+                    bookmarks: Bookmark[];
+                }> | null;
+                
+                // Version 1 to 2: No breaking changes, preserve all data
+                if (version < 2) {
+                    // Ensure all required fields exist with defaults if missing
+                    return {
+                        tasks: state?.tasks || {},
+                        columns: state?.columns || {
+                            'todo': { id: 'todo', title: 'To Do', taskIds: [] },
+                            'in-progress': { id: 'in-progress', title: 'In Progress', taskIds: [] },
+                            'done': { id: 'done', title: 'Done', taskIds: [] },
+                        },
+                        columnOrder: state?.columnOrder || ['todo', 'in-progress', 'done'],
+                        theme: state?.theme || 'dark',
+                        bookmarks: state?.bookmarks || [
+                            { id: 'b1', title: 'Google', url: 'https://google.com' },
+                            { id: 'b2', title: 'YouTube', url: 'https://youtube.com' },
+                            { id: 'b3', title: 'Reddit', url: 'https://reddit.com' }
+                        ],
+                    };
+                }
+                
+                // Version 2: Return as-is, all data preserved
+                return state;
+            },
         }
     )
 );

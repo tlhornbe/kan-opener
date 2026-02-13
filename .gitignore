@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Extension builds and releases
+*.zip
+
+# Local documentation (use README.md for public docs)
+ERROR_ANALYSIS.md
+FIX_SUMMARY.md
+IMPLEMENTATION_SUMMARY.md
